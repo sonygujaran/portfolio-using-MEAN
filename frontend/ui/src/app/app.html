@@ -1,0 +1,301 @@
+<div class="app-container">
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-content">
+      <div class="logo">
+        <a href="#home">PORTPOLIO</a>
+      </div>
+      <ul id="primary-navigation" class="nav-links" [class.active]="navOpen">
+        <li><a href="#home" (click)="closeNav()">Home</a></li>
+        <li><a href="#about" (click)="closeNav()">About</a></li>
+        <li><a href="#projects" (click)="closeNav()">Projects</a></li>
+        <li><a href="#skills" (click)="closeNav()">Skills</a></li>
+        <li><a href="#education" (click)="closeNav()">Education</a></li>
+        <li><a href="#internship" (click)="closeNav()">Internship</a></li>
+        <li><a href="#certifications" (click)="closeNav()">Certifications</a></li>
+        <li><a href="#contact" (click)="closeNav()">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <!-- <button class="theme-toggle" (click)="toggleTheme()" [title]="isDarkTheme ? 'Light Mode' : 'Dark Mode'">
+          <span>{{ isDarkTheme ? '☀️' : '🌙' }}</span>
+        </button> -->
+        <button
+          class="hamburger"
+          [class.active]="navOpen"
+          [attr.aria-expanded]="navOpen"
+          aria-controls="primary-navigation"
+          [attr.aria-label]="navOpen ? 'Close navigation menu' : 'Open navigation menu'"
+          (click)="toggleNav()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Home Section -->
+    <section id="home" class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <img
+            class="profile-photo"
+            src="/sony1.png"
+            alt="Stock portrait placeholder, not Sony"
+            width="180"
+            height="180">
+          <h1>Sony</h1>
+          <p class="title">Information Technology Trainee @ ACT Fibernet</p>
+          <p class="subtitle"> Proficient in Java, SQL,
+            JavaScript, and NodeJS with project experience building end-to-end web applications. </p>
+          <div class="cta-buttons">
+            <a href="#projects" class="btn btn-primary">View My Work</a>
+            <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+          </div>
+          <div class="social-links">
+            <a href="https://www.linkedin.com/in/sony-s-gujaran-84079b25a" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://github.com/sonygujaran" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://www.instagram.com/__s__o__n__y__13___" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="container">
+        <h2>About Me</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>Information Technology Trainee at ACT Fibernet, building skills in MongoDB, MySQL, Express.js, Angular and Nodejs</p>
+            <p>I specialize in:</p>
+            <ul>
+              <li>Full-stack development with MEAN</li>
+              <li>REST API design and implementation</li>
+              <li>Computer Networks</li>
+            </ul>
+          </div>
+          <div class="about-stats">
+            <div class="stat">
+              <h3>3+</h3>
+              <p>Certifications Completed</p>
+            </div>
+            <div class="stat">
+              <h3>2+</h3>
+              <p>Projects Completed</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+      <div class="container">
+        <h2>Projects</h2>
+        @if (projectsLoading()) {
+          <p class="data-state" role="status">Loading projects...</p>
+        } @else if (projectsError()) {
+          <p class="data-state data-error" role="alert">{{ projectsError() }}</p>
+        } @else if (projects().length === 0) {
+          <p class="data-state">No projects are available yet.</p>
+        } @else {
+          <div class="projects-grid row g-4">
+            @for (project of projects(); track project._id ?? project.title) {
+              <div class="col-12 col-md-6 col-lg-4">
+                <article class="project-card h-100">
+                  @if (project.imageUrl) {
+                    <img class="project-image" [src]="project.imageUrl" [alt]="project.title">
+                  }
+                  <div class="project-header">
+                    <h3>{{ project.title }}</h3>
+                    <div class="project-links">
+                     
+                      @if (project.githubUrl) {
+                        <a [href]="project.githubUrl" target="_blank" rel="noopener noreferrer">Code</a>
+                      }
+                    </div>
+                  </div>
+                  <p class="description">{{ project.description }}</p>
+                  @if (project.teamContext) {
+                    <p class="team-context">{{ project.teamContext }}</p>
+                  }
+                  @if (project.highlights?.length) {
+                    <ul class="project-highlights">
+                      @for (highlight of project.highlights; track highlight) {
+                        <li>{{ highlight }}</li>
+                      }
+                    </ul>
+                  }
+                  <div class="tech-stack">
+                    @for (technology of project.technologies; track technology) {
+                      <span class="tech">{{ technology }}</span>
+                    }
+                  </div>
+                </article>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+      <div class="container">
+        <h2>Skills</h2>
+        @if (skillsLoading()) {
+          <p class="data-state" role="status">Loading skills...</p>
+        } @else if (skillsError()) {
+          <p class="data-state data-error" role="alert">{{ skillsError() }}</p>
+        } @else if (skills().length === 0) {
+          <p class="data-state">No skills are available yet.</p>
+        } @else {
+          <div class="skills-grid row g-4">
+            @for (category of skills(); track category._id ?? category.category) {
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="skill-category h-100">
+                  <h3>{{ category.category }}</h3>
+                  <ul>
+                    @for (skill of category.skills; track skill.name) {
+                      <li>
+                        {{ skill.name }}
+                      
+                      </li>
+                    }
+                  </ul>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="education">
+      <div class="container">
+        <h2>Education</h2>
+        @if (educationLoading()) {
+          <p class="data-state" role="status">Loading education...</p>
+        } @else if (educationError()) {
+          <p class="data-state data-error" role="alert">{{ educationError() }}</p>
+        } @else if (education().length === 0) {
+          <p class="data-state">No education is available yet.</p>
+        } @else {
+          <div class="education-grid row g-4">
+            @for (record of education(); track record._id ?? record.qualification) {
+              <div class="col-12 col-md-6 col-lg-4">
+                <article class="education-card h-100">
+                  <h3>{{ record.qualification }}</h3>
+                  <p>{{ record.institution }}</p>
+                  <p class="education-period">{{ record.period }}</p>
+                  <p class="education-result">{{ record.result }}</p>
+                </article>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Internship Section -->
+    <section id="internship" class="experience">
+      <div class="container">
+        <h2>Internship</h2>
+        @if (internshipLoading()) {
+          <p class="data-state" role="status">Loading internship...</p>
+        } @else if (internshipError()) {
+          <p class="data-state data-error" role="alert">{{ internshipError() }}</p>
+        } @else if (internships().length === 0) {
+          <p class="data-state">No internship is available yet.</p>
+        } @else {
+          <div class="timeline">
+            @for (internship of internships(); track internship._id ?? internship.position + internship.company) {
+              <div class="timeline-item">
+                <div class="timeline-date">{{ internship.period }}</div>
+                <div class="timeline-content">
+                  <h3>{{ internship.position }}</h3>
+                  <p class="company">{{ internship.company }}@if (internship.location) {, {{ internship.location }}}</p>
+                  @if (internship.responsibilities.length > 0) {
+                    <ul>
+                      @for (responsibility of internship.responsibilities; track responsibility) {
+                        <li>{{ responsibility }}</li>
+                      }
+                    </ul>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="certifications">
+      <div class="container">
+        <h2>Certifications</h2>
+        @if (certificationsLoading()) {
+          <p class="data-state" role="status">Loading certifications...</p>
+        } @else if (certificationsError()) {
+          <p class="data-state data-error" role="alert">{{ certificationsError() }}</p>
+        } @else if (certifications().length === 0) {
+          <p class="data-state">No certifications are available yet.</p>
+        } @else {
+          <ul class="certification-list">
+            @for (certification of certifications(); track certification._id ?? certification.name) {
+              <li>
+                <span>{{ certification.name }}</span>
+                <span class="certification-issuer">{{ certification.issuer }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2>Contact Information</h2>
+        <div class="contact-content">
+          <div class="contact-info">
+            
+            <div class="contact-item">
+              <strong>Email:</strong>
+              <a href="mailto:sonysgujaran@gmail.com">sonysgujaran@gmail.com</a>
+            </div>
+            <div class="contact-item">
+              <strong>Phone:</strong>
+              <a href="tel:+918123178709">+91 8123178709</a>
+            </div>
+            <div class="contact-item">
+              <strong>Location:</strong>
+              <p>Mangalore, Karnataka, India</p>
+            </div>
+            <div class="contact-item">
+              <strong>LinkedIn:</strong>
+              <a href="https://www.linkedin.com/in/sony-s-gujaran-84079b25a/" target="_blank">linkedin.com/in/sony-s-gujaran-84079b25a</a>
+            </div>
+          </div>
+
+          
+        </div>
+      </div>
+    </section>
+  
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Sony. All rights reserved.</p>
+      <p>Portfolio built with Angular, Node.js & MongoDB</p>
+    </div>
+  </footer>
+</div>
+
